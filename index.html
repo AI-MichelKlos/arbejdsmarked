@@ -1,1 +1,559 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="En samlet indgang til Michel Klos' dashboards og interaktive analyser af det danske arbejdsmarked.">
+  <meta name="theme-color" content="#0F2B36">
+  <title>Arbejdsmarkedet i tal | Michel Klos</title>
+  <style>
+    :root {
+      --navy: #0F2B36;
+      --navy-light: #244d4b;
+      --green: #6B9E78;
+      --green-dark: #3d6b47;
+      --orange: #E07A40;
+      --blue: #4A90C4;
+      --purple: #9B59B6;
+      --ink: #0F2B36;
+      --muted: #68777d;
+      --line: #E8EBE8;
+      --paper: #ffffff;
+      --soft: #f5f7f5;
+      --shadow: 0 8px 28px rgba(15, 43, 54, .08);
+      --shadow-hover: 0 16px 38px rgba(15, 43, 54, .14);
+    }
 
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 42px 20px 46px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -125px;
+      top: -210px;
+      border: 1px solid rgba(201, 223, 207, .22);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 58px rgba(201, 223, 207, .05),
+        0 0 0 118px rgba(201, 223, 207, .035);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 42px;
+      align-items: end;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #c9dfcf;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      max-width: 800px;
+      margin: 0;
+      color: #fff;
+      font-size: clamp(2.25rem, 5vw, 4.15rem);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+    }
+
+    .byline {
+      margin-top: 9px;
+      color: #c9d8d5;
+      font-size: .82rem;
+      font-weight: 650;
+    }
+
+    .hero-copy {
+      max-width: 780px;
+      margin: 16px 0 0;
+      color: #e7eeee;
+      font-size: 1.04rem;
+      line-height: 1.6;
+    }
+
+    .hero-stat {
+      min-width: 180px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .07);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-stat strong {
+      display: block;
+      color: #fff;
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .hero-stat span {
+      display: block;
+      margin-top: 6px;
+      color: #dbe8e1;
+      font-size: .8rem;
+      line-height: 1.35;
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 30px 20px 58px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      box-shadow: 0 5px 18px rgba(15, 43, 54, .05);
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1 1 280px;
+      max-width: 430px;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    #search {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 13px 9px 40px;
+      border: 1px solid #d6dfd9;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    #search:focus-visible,
+    .filter:focus-visible,
+    .project-link:focus-visible {
+      outline: 3px solid rgba(74, 144, 196, .35);
+      outline-offset: 2px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter {
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid var(--green-dark);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--green-dark);
+      cursor: pointer;
+      font: inherit;
+      font-size: .82rem;
+      font-weight: 750;
+    }
+
+    .filter:hover,
+    .filter.active {
+      background: var(--green-dark);
+      color: #fff;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      margin: 39px 0 17px;
+      padding-bottom: 9px;
+      border-bottom: 3px solid var(--green);
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      line-height: 1.2;
+    }
+
+    #result-count {
+      color: var(--muted);
+      font-size: .8rem;
+      white-space: nowrap;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .project-card {
+      --accent: var(--green);
+      display: flex;
+      min-height: 285px;
+      flex-direction: column;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--accent);
+      border-radius: 12px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .project-card.featured {
+      grid-column: span 2;
+      background:
+        linear-gradient(110deg, rgba(107, 158, 120, .09), rgba(255, 255, 255, 0) 54%),
+        var(--paper);
+    }
+
+    .project-card.blue { --accent: var(--blue); }
+    .project-card.orange { --accent: var(--orange); }
+    .project-card.purple { --accent: var(--purple); }
+
+    .card-topline {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin-bottom: 17px;
+    }
+
+    .project-type {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 14%, white);
+      color: var(--ink);
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(107, 158, 120, .13);
+    }
+
+    .live-label {
+      color: var(--muted);
+      font-size: .73rem;
+      font-weight: 650;
+    }
+
+    .project-card h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.25rem;
+      line-height: 1.23;
+    }
+
+    .project-card.featured h3 { font-size: 1.48rem; }
+
+    .project-card p {
+      margin: 11px 0 15px;
+      color: var(--muted);
+      font-size: .91rem;
+      line-height: 1.58;
+    }
+
+    .topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: auto 0 18px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .topics li {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #526268;
+      background: #fafbfa;
+      font-size: .72rem;
+      line-height: 1;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      color: var(--green-dark);
+      font-size: .86rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .project-link span:last-child {
+      font-size: 1.15rem;
+      line-height: 1;
+      transition: transform .18s ease;
+    }
+
+    .project-card:hover .project-link span:last-child { transform: translateX(3px); }
+
+    .empty-state {
+      display: none;
+      padding: 34px 20px;
+      border: 1px dashed #cdd8d1;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.55;
+    }
+
+    footer {
+      padding: 25px 20px 34px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      font-size: .79rem;
+      text-align: center;
+    }
+
+    footer strong { color: var(--ink); }
+
+    @media (max-width: 940px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 25px; }
+      .hero-stat { width: fit-content; min-width: 210px; }
+      .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .project-card.featured { grid-column: span 2; }
+    }
+
+    @media (max-width: 620px) {
+      .hero { padding: 31px 16px 35px; }
+      .hero-copy { font-size: .96rem; }
+      main { padding: 18px 14px 42px; }
+      .toolbar { align-items: stretch; padding: 13px; }
+      .search-wrap { max-width: none; flex-basis: 100%; }
+      .filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+      .filter { width: 100%; }
+      .section-heading { align-items: start; margin-top: 31px; }
+      .project-grid { grid-template-columns: 1fr; }
+      .project-card,
+      .project-card.featured { grid-column: auto; min-height: 0; }
+      .project-card.featured h3 { font-size: 1.25rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .project-card,
+      .project-link span:last-child { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">Dashboards og analyser</p>
+        <h1>Arbejdsmarkedet i tal</h1>
+        <div class="byline">Udarbejdet af Michel Klos</div>
+        <p class="hero-copy">En samlet indgang til interaktive overblik om beskæftigelse, ledighed, a-kasser, virksomheder og arbejdsmarkedets udvikling.</p>
+      </div>
+      <div class="hero-stat" aria-label="Syv interaktive løsninger">
+        <strong>7</strong>
+        <span>interaktive dashboards og analyser</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar" aria-label="Filtrer løsninger">
+      <label class="search-wrap" for="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
+        <input id="search" type="search" placeholder="Søg efter emne eller dashboard" autocomplete="off">
+      </label>
+      <div class="filters" role="group" aria-label="Emner">
+        <button class="filter active" type="button" data-filter="all" aria-pressed="true">Alle</button>
+        <button class="filter" type="button" data-filter="overblik" aria-pressed="false">Overblik</button>
+        <button class="filter" type="button" data-filter="maalgrupper" aria-pressed="false">Målgrupper</button>
+        <button class="filter" type="button" data-filter="geografi" aria-pressed="false">Geografi</button>
+        <button class="filter" type="button" data-filter="virksomheder" aria-pressed="false">Virksomheder</button>
+        <button class="filter" type="button" data-filter="historie" aria-pressed="false">Historie</button>
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h2>Vælg et overblik</h2>
+      <span id="result-count" aria-live="polite">7 løsninger</span>
+    </div>
+
+    <section class="project-grid" aria-label="Dashboards og analyser">
+      <article class="project-card featured" data-tags="overblik ledighed beskæftigelse samfundsøkonomi internationalt eurostat jobindsats statistikbanken">
+        <div class="card-topline"><span class="project-type">Samlet overblik</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>Analytisk overblik: Arbejdsmarkedet</h3>
+        <p>Følg de centrale nøgletal for ledighed, beskæftigelse, samfundsøkonomi og den internationale udvikling i ét samlet dashboard.</p>
+        <ul class="topics" aria-label="Emner"><li>Ledighed</li><li>Beskæftigelse</li><li>Økonomi</li><li>Internationalt</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/Dashboard/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="project-card orange" data-tags="overblik jur ledighed langtidsledighed aktivering varslinger konkurser dimittender sanktioner">
+        <div class="card-topline"><span class="project-type">JUR</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>JUR: Arbejdsmarkedsoverblik</h3>
+        <p>Et specialiseret overblik over ledighed, langtidsledighed, aktivering, varslinger, konkurser, dimittender og sanktioner.</p>
+        <ul class="topics" aria-label="Emner"><li>Ledighed</li><li>Aktivering</li><li>Dimittender</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/Dashboard-dak-jur/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="project-card purple" data-tags="maalgrupper a-kasse a-kasser medlemmer profil ledighed uddannelse branche">
+        <div class="card-topline"><span class="project-type">A-kasser</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>A-kasseindsigt</h3>
+        <p>Vælg en a-kasse og undersøg dens medlemsgrundlag, profil og centrale arbejdsmarkedsdata i en samlet visning.</p>
+        <ul class="topics" aria-label="Emner"><li>Medlemmer</li><li>Profiler</li><li>A-kasser</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="project-card blue" data-tags="geografi kommuner kommune ledighed langtidsledighed jobindsats sammenligning">
+        <div class="card-topline"><span class="project-type">Kommuner</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>Kommunal beskæftigelsesindsats</h3>
+        <p>Vælg en kommune, følg ledighed og langtidsledighed, og sammenlign udviklingen med hele landet eller et andet område.</p>
+        <ul class="topics" aria-label="Emner"><li>Kommuner</li><li>Ledighed</li><li>Sammenligning</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/kommunal-beskaeftigelsesindsats/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="project-card" data-tags="maalgrupper udenlandsk arbejdskraft lønmodtagere statsborgerskab branche beskæftigelse internationalt">
+        <div class="card-topline"><span class="project-type">Arbejdskraft</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>Udenlandske lønmodtagere i Danmark</h3>
+        <p>Se udviklingen i udenlandske lønmodtagere, deres andel af beskæftigelsen og fordelingen på statsborgerskab og branche.</p>
+        <ul class="topics" aria-label="Emner"><li>Statsborgerskab</li><li>Brancher</li><li>Beskæftigelse</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="project-card orange" data-tags="virksomheder virksomhed ansatte beskæftigelse cvr brancher største virksomheder">
+        <div class="card-topline"><span class="project-type">Virksomheder</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>Ansatte i Danmarks største virksomheder</h3>
+        <p>Følg den månedlige beskæftigelse i Danmarks 1.000 største virksomheder, sammenlign virksomheder og undersøg hele brancher.</p>
+        <ul class="topics" aria-label="Emner"><li>Ansatte</li><li>CVR</li><li>Brancher</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/ansatteidanskevirksomheder/" target="_blank" rel="noopener"><span>Åbn visualisering</span><span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="project-card purple" data-tags="historie den danske model quiz arbejdsmarkedspolitik forlig overenskomst">
+        <div class="card-topline"><span class="project-type">Historie</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv quiz</span></div>
+        <h3>Forlig før daggry</h3>
+        <p>En arbejdsmarkedshistorisk quiz om 13 afgørende øjeblikke fra Fælleden og Kanslergadeforliget til nutidens danske model.</p>
+        <ul class="topics" aria-label="Emner"><li>Den danske model</li><li>Historie</li><li>Quiz</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/dendanskemodel/" target="_blank" rel="noopener"><span>Start fortællingen</span><span aria-hidden="true">→</span></a>
+      </article>
+    </section>
+
+    <div class="empty-state" id="empty-state">
+      Ingen løsninger matcher din søgning. Prøv et andet ord eller vælg en anden kategori.
+    </div>
+  </main>
+
+  <footer>
+    <strong>Udarbejdet af Michel Klos</strong>
+  </footer>
+
+  <script>
+    (() => {
+      const search = document.getElementById('search');
+      const filters = [...document.querySelectorAll('.filter')];
+      const cards = [...document.querySelectorAll('.project-card')];
+      const count = document.getElementById('result-count');
+      const empty = document.getElementById('empty-state');
+      let activeFilter = 'all';
+
+      const normalize = value => value
+        .toLocaleLowerCase('da-DK')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+      function render() {
+        const query = normalize(search.value.trim());
+        let visible = 0;
+
+        cards.forEach(card => {
+          const haystack = normalize(`${card.textContent} ${card.dataset.tags || ''}`);
+          const matchesText = !query || haystack.includes(query);
+          const matchesFilter = activeFilter === 'all' || normalize(card.dataset.tags || '').includes(activeFilter);
+          const show = matchesText && matchesFilter;
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+
+        count.textContent = `${visible} ${visible === 1 ? 'løsning' : 'løsninger'}`;
+        empty.style.display = visible ? 'none' : 'block';
+      }
+
+      filters.forEach(button => {
+        button.addEventListener('click', () => {
+          activeFilter = button.dataset.filter;
+          filters.forEach(item => {
+            const selected = item === button;
+            item.classList.toggle('active', selected);
+            item.setAttribute('aria-pressed', String(selected));
+          });
+          render();
+        });
+      });
+
+      search.addEventListener('input', render);
+    })();
+  </script>
+</body>
+</html>
