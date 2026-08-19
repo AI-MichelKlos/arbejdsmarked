@@ -135,84 +135,13 @@
       padding: 30px 20px 58px;
     }
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      padding: 15px 16px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--paper);
-      box-shadow: 0 5px 18px rgba(15, 43, 54, .05);
-    }
-
-    .search-wrap {
-      position: relative;
-      flex: 1 1 280px;
-      max-width: 430px;
-    }
-
-    .search-wrap svg {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      width: 18px;
-      height: 18px;
-      color: var(--muted);
-      transform: translateY(-50%);
-      pointer-events: none;
-    }
-
-    #search {
-      width: 100%;
-      min-height: 42px;
-      padding: 9px 13px 9px 40px;
-      border: 1px solid #d6dfd9;
-      border-radius: 8px;
-      background: #fff;
-      color: var(--ink);
-      font: inherit;
-    }
-
-    #search:focus-visible,
-    .filter:focus-visible,
     .project-link:focus-visible {
       outline: 3px solid rgba(74, 144, 196, .35);
       outline-offset: 2px;
     }
 
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .filter {
-      min-height: 38px;
-      padding: 8px 12px;
-      border: 1px solid var(--green-dark);
-      border-radius: 8px;
-      background: #fff;
-      color: var(--green-dark);
-      cursor: pointer;
-      font: inherit;
-      font-size: .82rem;
-      font-weight: 750;
-    }
-
-    .filter:hover,
-    .filter.active {
-      background: var(--green-dark);
-      color: #fff;
-    }
-
     .section-heading {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: end;
-      margin: 39px 0 17px;
+      margin: 9px 0 17px;
       padding-bottom: 9px;
       border-bottom: 3px solid var(--green);
     }
@@ -221,12 +150,6 @@
       margin: 0;
       font-size: 1.5rem;
       line-height: 1.2;
-    }
-
-    #result-count {
-      color: var(--muted);
-      font-size: .8rem;
-      white-space: nowrap;
     }
 
     .project-grid {
@@ -248,8 +171,6 @@
       box-shadow: var(--shadow);
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
     }
-
-    .project-card[hidden] { display: none !important; }
 
     .project-card:hover {
       transform: translateY(-3px);
@@ -356,17 +277,6 @@
 
     .project-card:hover .project-link span:last-child { transform: translateX(3px); }
 
-    .empty-state {
-      display: none;
-      padding: 34px 20px;
-      border: 1px dashed #cdd8d1;
-      border-radius: 12px;
-      background: #fff;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.55;
-    }
-
     footer {
       padding: 25px 20px 34px;
       border-top: 1px solid var(--line);
@@ -389,11 +299,7 @@
       .hero { padding: 31px 16px 35px; }
       .hero-copy { font-size: .96rem; }
       main { padding: 18px 14px 42px; }
-      .toolbar { align-items: stretch; padding: 13px; }
-      .search-wrap { max-width: none; flex-basis: 100%; }
-      .filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
-      .filter { width: 100%; }
-      .section-heading { align-items: start; margin-top: 31px; }
+      .section-heading { margin-top: 13px; }
       .project-grid { grid-template-columns: 1fr; }
       .project-card,
       .project-card.featured { grid-column: auto; min-height: 0; }
@@ -424,27 +330,12 @@
   </header>
 
   <main>
-    <div class="toolbar" aria-label="Filtrer løsninger">
-      <label class="search-wrap" for="search">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
-        <input id="search" type="search" placeholder="Søg efter emne eller dashboard" autocomplete="off">
-      </label>
-      <div class="filters" role="group" aria-label="Emner">
-        <button class="filter active" type="button" data-filter="all" aria-pressed="true">Alle</button>
-        <button class="filter" type="button" data-filter="overblik" aria-pressed="false">Overblik</button>
-        <button class="filter" type="button" data-filter="maalgrupper" aria-pressed="false">Målgrupper</button>
-        <button class="filter" type="button" data-filter="geografi" aria-pressed="false">Geografi</button>
-        <button class="filter" type="button" data-filter="virksomheder" aria-pressed="false">Virksomheder</button>
-      </div>
-    </div>
-
     <div class="section-heading">
       <h2>Vælg et overblik</h2>
-      <span id="result-count" aria-live="polite">5 løsninger</span>
     </div>
 
     <section class="project-grid" aria-label="Dashboards og analyser">
-      <article class="project-card featured" data-tags="overblik ledighed beskæftigelse samfundsøkonomi internationalt eurostat jobindsats statistikbanken">
+      <article class="project-card featured">
         <div class="card-topline"><span class="project-type">Samlet overblik</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>Analytisk overblik: Arbejdsmarkedet</h3>
         <p>Følg de centrale nøgletal for ledighed, beskæftigelse, samfundsøkonomi og den internationale udvikling i ét samlet dashboard.</p>
@@ -452,7 +343,7 @@
         <a class="project-link" href="https://ai-michelklos.github.io/Dashboard/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
 
-      <article class="project-card purple" data-tags="maalgrupper a-kasse a-kasser medlemmer profil ledighed uddannelse branche">
+      <article class="project-card purple">
         <div class="card-topline"><span class="project-type">A-kasser</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>A-kasseindsigt</h3>
         <p>Vælg en a-kasse og undersøg dens medlemsgrundlag, profil og centrale arbejdsmarkedsdata i en samlet visning.</p>
@@ -460,7 +351,7 @@
         <a class="project-link" href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
 
-      <article class="project-card blue" data-tags="geografi kommuner kommune ledighed langtidsledighed jobindsats sammenligning">
+      <article class="project-card blue">
         <div class="card-topline"><span class="project-type">Kommuner</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>Kommuneindsigt</h3>
         <p>Vælg en kommune, følg ledighed og langtidsledighed, og sammenlign udviklingen med hele landet eller et andet område.</p>
@@ -468,7 +359,7 @@
         <a class="project-link" href="https://ai-michelklos.github.io/kommunal-beskaeftigelsesindsats/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
 
-      <article class="project-card" data-tags="maalgrupper udenlandsk arbejdskraft lønmodtagere statsborgerskab branche beskæftigelse internationalt">
+      <article class="project-card">
         <div class="card-topline"><span class="project-type">Arbejdskraft</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>Udenlandske lønmodtagere i Danmark</h3>
         <p>Se udviklingen i udenlandske lønmodtagere, deres andel af beskæftigelsen og fordelingen på statsborgerskab og branche.</p>
@@ -476,7 +367,7 @@
         <a class="project-link" href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
 
-      <article class="project-card orange" data-tags="virksomheder virksomhed ansatte beskæftigelse cvr brancher største virksomheder">
+      <article class="project-card orange">
         <div class="card-topline"><span class="project-type">Virksomheder</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>Ansatte i Danmarks største virksomheder</h3>
         <p>Følg den månedlige beskæftigelse i Danmarks 1.000 største virksomheder, sammenlign virksomheder og undersøg hele brancher.</p>
@@ -485,61 +376,11 @@
       </article>
 
     </section>
-
-    <div class="empty-state" id="empty-state">
-      Ingen løsninger matcher din søgning. Prøv et andet ord eller vælg en anden kategori.
-    </div>
   </main>
 
   <footer>
     <strong>Udarbejdet af Michel Klos</strong>
   </footer>
 
-  <script>
-    (() => {
-      const search = document.getElementById('search');
-      const filters = [...document.querySelectorAll('.filter')];
-      const cards = [...document.querySelectorAll('.project-card')];
-      const count = document.getElementById('result-count');
-      const empty = document.getElementById('empty-state');
-      let activeFilter = 'all';
-
-      const normalize = value => value
-        .toLocaleLowerCase('da-DK')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-
-      function render() {
-        const query = normalize(search.value.trim());
-        let visible = 0;
-
-        cards.forEach(card => {
-          const haystack = normalize(`${card.textContent} ${card.dataset.tags || ''}`);
-          const matchesText = !query || haystack.includes(query);
-          const matchesFilter = activeFilter === 'all' || normalize(card.dataset.tags || '').includes(activeFilter);
-          const show = matchesText && matchesFilter;
-          card.hidden = !show;
-          if (show) visible += 1;
-        });
-
-        count.textContent = `${visible} ${visible === 1 ? 'løsning' : 'løsninger'}`;
-        empty.style.display = visible ? 'none' : 'block';
-      }
-
-      filters.forEach(button => {
-        button.addEventListener('click', () => {
-          activeFilter = button.dataset.filter;
-          filters.forEach(item => {
-            const selected = item === button;
-            item.classList.toggle('active', selected);
-            item.setAttribute('aria-pressed', String(selected));
-          });
-          render();
-        });
-      });
-
-      search.addEventListener('input', render);
-    })();
-  </script>
 </body>
 </html>
