@@ -4,420 +4,226 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="En samlet indgang til Michel Klos' dashboards og interaktive analyser af det danske arbejdsmarked.">
-  <meta name="theme-color" content="#F1F3EC">
+  <meta name="theme-color" content="#0F2B36">
   <title>Arbejdsmarkedet i tal | Michel Klos</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23F1F3EC'/%3E%3Cpath d='M14 45V34h7v11zm14 0V24h7v21zm14 0V14h7v31z' fill='%236B9E78'/%3E%3Cpath d='M11 49h42' stroke='%230F2B36' stroke-width='3'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230F2B36'/%3E%3Cpath d='M14 45V34h7v11zm14 0V24h7v21zm14 0V14h7v31z' fill='%236B9E78'/%3E%3Cpath d='M11 49h42' stroke='%23ffffff' stroke-width='3'/%3E%3C/svg%3E">
   <style>
     :root {
-      --paper: #F1F3EC;
-      --card: #FFFFFF;
-      --line: #D9DFD6;
-      --line-soft: #E8EBE8;
-      --ink: #0F2B36;
-      --muted: #55636A;
-      --accent: #6B9E78;
-      --accent-dark: #3D6B47;
-      --accent-soft: #E4EDE6;
-      --serif: "Source Serif 4", Georgia, serif;
-      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --navy: #0F2B36;
+      --green: #6B9E78;
+      --green-dark: #3D6B47;
+      --blue: #4A90C4;
+      --orange: #E07A40;
+      --purple: #9B59B6;
+      --muted: #68777D;
+      --line: #E8EBE8;
+      --paper: #FFFFFF;
+      --soft: #F5F7F5;
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
       margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--sans);
+      background: var(--soft);
+      color: var(--navy);
+      font-family: "Segoe UI", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
-
     a { color: inherit; }
-
-    a:focus-visible {
-      outline: 3px solid var(--accent);
-      outline-offset: 3px;
-    }
-
-    .top-rule {
-      height: 4px;
-      background: var(--accent);
-    }
+    a:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
 
     .site-nav {
       border-bottom: 1px solid var(--line);
-      background: rgba(241, 243, 236, .98);
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(15,43,54,.04);
     }
-
     .nav-inner {
       display: flex;
       min-height: 58px;
-      max-width: 1180px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 0 20px;
       align-items: center;
       justify-content: space-between;
       gap: 28px;
     }
-
     .brand {
       flex: 0 0 auto;
-      font-family: var(--serif);
-      font-size: 1.06rem;
-      font-weight: 700;
+      color: var(--navy);
+      font-size: 1.02rem;
+      font-weight: 800;
       text-decoration: none;
     }
-
     .brand[aria-current="page"] {
       text-decoration: underline;
-      text-decoration-color: var(--accent);
-      text-decoration-thickness: 2px;
+      text-decoration-color: var(--green);
+      text-decoration-thickness: 3px;
       text-underline-offset: 7px;
     }
-
-    .nav-links {
-      display: flex;
-      margin: 0;
-      padding: 0;
-      align-items: stretch;
-      gap: 20px;
-      list-style: none;
-    }
-
+    .nav-links { display: flex; margin: 0; padding: 0; align-items: stretch; gap: 20px; list-style: none; }
     .nav-links a {
       display: flex;
       min-height: 58px;
       align-items: center;
-      border-bottom: 2px solid transparent;
       color: var(--muted);
       font-size: .76rem;
-      font-weight: 650;
-      line-height: 1.2;
+      font-weight: 700;
       text-decoration: none;
       white-space: nowrap;
     }
-
-    .nav-links a:hover {
-      color: var(--accent-dark);
-    }
-
+    .nav-links a:hover { color: var(--green-dark); }
     .mobile-overview-link {
       display: none;
       padding: 9px 12px;
-      border: 1px solid var(--accent);
-      border-radius: 6px;
-      color: var(--accent-dark);
+      border: 1px solid var(--green-dark);
+      border-radius: 8px;
+      color: var(--green-dark);
+      background: #fff;
       font-size: .82rem;
-      font-weight: 800;
+      font-weight: 700;
       text-decoration: none;
     }
 
     .hero {
-      border-bottom: 1px solid var(--line);
+      background-color: var(--navy);
+      background-image:
+        radial-gradient(circle at 76% 32%, rgba(107,158,120,.22), transparent 31%),
+        radial-gradient(circle at 20% 100%, rgba(74,144,196,.12), transparent 33%),
+        linear-gradient(135deg, #0F2B36, #244D4B);
+      color: #fff;
     }
-
     .hero-inner {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0,1fr) auto;
       gap: 42px;
       align-items: end;
-      max-width: 1180px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 72px 20px 54px;
+      padding: 42px 20px 38px;
     }
-
     .eyebrow {
-      margin: 0 0 12px;
-      color: var(--accent-dark);
-      font-size: .76rem;
-      font-weight: 800;
-      letter-spacing: .14em;
+      margin: 0 0 8px;
+      color: #C9DFCF;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
       text-transform: uppercase;
     }
-
-    .hero h1,
-    .section-heading h2,
-    .project-card h3,
-    .hero-stat strong {
-      font-family: var(--serif);
-    }
-
     .hero h1 {
       max-width: 900px;
-      margin: 0;
-      font-size: clamp(2.3rem, 4vw, 3.5rem);
-      font-weight: 600;
-      line-height: 1.08;
-      letter-spacing: -.02em;
-    }
-
-    .byline {
-      margin-top: 15px;
-      color: var(--muted);
-      font-size: .86rem;
+      margin: 5px 0 0;
+      color: #fff;
+      font-size: clamp(2.1rem,4vw,3.4rem);
       font-weight: 700;
+      line-height: 1.08;
     }
-
-    .hero-copy {
-      max-width: 780px;
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: 1.08rem;
-      line-height: 1.7;
-    }
-
+    .byline { margin-top: 5px; color: #C9D8D5; font-size: .78rem; font-weight: 600; }
+    .hero-copy { max-width: 900px; margin: 10px 0 0; color: #E7EEEE; font-size: 1rem; line-height: 1.5; }
     .hero-stat {
-      min-width: 190px;
+      min-width: 195px;
       padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--card);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 12px;
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 6px 20px rgba(0,0,0,.12);
     }
+    .hero-stat strong { display: block; color: #fff; font-size: 2.5rem; font-weight: 800; line-height: 1; }
+    .hero-stat span { display: block; margin-top: 8px; color: #DDE9E6; font-size: .8rem; line-height: 1.4; }
 
-    .hero-stat strong {
-      display: block;
-      font-size: 2.5rem;
-      font-weight: 600;
-      line-height: 1;
-      letter-spacing: -.02em;
-    }
-
-    .hero-stat span {
-      display: block;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: .8rem;
-      line-height: 1.4;
-    }
-
-    main {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 46px 20px 72px;
-    }
-
-    .section-heading {
-      margin: 0 0 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-    }
-
+    main { max-width: 1280px; margin: 0 auto; padding: 34px 20px 64px; }
+    .section-heading { margin: 0 0 20px; }
     .section-heading h2 {
       margin: 0;
-      font-size: clamp(1.75rem, 2.5vw, 2.2rem);
-      font-weight: 600;
+      padding-bottom: 8px;
+      border-bottom: 3px solid var(--green);
+      color: var(--navy);
+      font-size: 23px;
+      font-weight: 700;
       line-height: 1.15;
-      letter-spacing: -.01em;
     }
-
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
+    .project-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
     .project-card {
       position: relative;
       display: flex;
       min-height: 285px;
       flex-direction: column;
-      padding: 22px;
+      padding: 20px;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--card);
-      transition: border-color .16s ease, box-shadow .16s ease;
+      border-top: 4px solid var(--green);
+      border-radius: 12px;
+      background: var(--paper);
+      box-shadow: 0 6px 20px rgba(15,43,54,.07);
+      transition: transform .16s ease, box-shadow .16s ease;
     }
-
-    .project-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 4px 6px rgba(15, 43, 54, .08);
-    }
-
-    .project-card.featured {
-      grid-column: span 2;
-    }
-
-    .card-topline {
-      display: flex;
-      gap: 9px;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
+    .project-card:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(15,43,54,.11); }
+    .project-card.featured { grid-column: span 2; }
+    .card-topline { display: flex; gap: 9px; align-items: center; margin-bottom: 18px; }
     .project-type {
       padding: 5px 8px;
-      border: 1px solid var(--accent);
+      border: 1px solid #C7D9CB;
       border-radius: 999px;
-      color: var(--accent-dark);
-      background: var(--accent-soft);
+      color: var(--green-dark);
+      background: #EDF4EF;
       font-size: .68rem;
       font-weight: 800;
-      letter-spacing: .07em;
+      letter-spacing: .06em;
       text-transform: uppercase;
     }
-
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    .live-label {
-      color: var(--muted);
-      font-size: .72rem;
-      font-weight: 700;
-    }
-
-    .project-card h3 {
-      margin: 0;
-      font-size: 1.42rem;
-      font-weight: 600;
-      line-height: 1.22;
-    }
-
-    .project-card.featured h3 {
-      font-size: 1.62rem;
-    }
-
-    .project-card p {
-      margin: 12px 0 18px;
-      color: var(--muted);
-      font-size: .9rem;
-      line-height: 1.62;
-    }
-
-    .topics {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: auto 0 20px;
-      padding: 0;
-      list-style: none;
-    }
-
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .live-label { color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .project-card h3 { margin: 0; color: var(--navy); font-size: 1.35rem; font-weight: 700; line-height: 1.22; }
+    .project-card.featured h3 { font-size: 1.55rem; }
+    .project-card p { margin: 12px 0 18px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+    .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 20px; padding: 0; list-style: none; }
     .topics li {
       padding: 5px 8px;
       border: 1px solid var(--line);
-      border-radius: 5px;
+      border-radius: 6px;
       color: var(--muted);
-      background: var(--paper);
+      background: var(--soft);
       font-size: .7rem;
       line-height: 1;
     }
-
     .project-link {
       display: inline-flex;
       width: fit-content;
       align-items: center;
       gap: 8px;
-      color: var(--accent-dark);
+      color: var(--green-dark);
       font-size: .84rem;
-      font-weight: 850;
+      font-weight: 700;
       text-decoration: underline;
-      text-decoration-color: var(--accent);
+      text-decoration-color: var(--green);
       text-decoration-thickness: 2px;
       text-underline-offset: 4px;
     }
+    .project-link::after { content: ""; position: absolute; inset: 0; }
 
-    .project-link::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      background: var(--paper);
-    }
-
-    .footer-inner {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 32px 20px 42px;
-      color: var(--muted);
-      font-size: .78rem;
-      line-height: 1.6;
-    }
-
-    .footer-inner strong {
-      color: var(--ink);
-      font-weight: 800;
-    }
+    footer { border-top: 1px solid var(--line); background: var(--soft); }
+    .footer-inner { max-width: 1280px; margin: 0 auto; padding: 30px 20px 38px; color: var(--muted); font-size: .78rem; }
+    .footer-inner strong { color: var(--navy); font-weight: 700; }
 
     @media (max-width: 940px) {
-      .hero-inner {
-        grid-template-columns: 1fr;
-        gap: 25px;
-      }
-
-      .hero-stat {
-        width: fit-content;
-        min-width: 210px;
-      }
-
-      .project-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .project-card.featured {
-        grid-column: span 2;
-      }
+      .hero-inner { grid-template-columns: 1fr; gap: 22px; }
+      .hero-stat { width: fit-content; min-width: 210px; }
+      .project-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .project-card.featured { grid-column: span 2; }
     }
-
     @media (max-width: 800px) {
-      .nav-links {
-        display: none;
-      }
-
-      .mobile-overview-link {
-        display: inline-flex;
-      }
+      .nav-links { display: none; }
+      .mobile-overview-link { display: inline-flex; }
     }
-
     @media (max-width: 620px) {
-      .nav-inner {
-        min-height: 54px;
-        padding: 0 16px;
-      }
-
-      .hero-inner {
-        padding: 49px 16px 40px;
-      }
-
-      .hero-copy {
-        font-size: 1rem;
-      }
-
-      main {
-        padding: 32px 14px 54px;
-      }
-
-      .project-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .project-card,
-      .project-card.featured {
-        grid-column: auto;
-        min-height: 0;
-      }
-
-      .project-card.featured h3 {
-        font-size: 1.42rem;
-      }
-
-      .footer-inner {
-        padding: 28px 16px 34px;
-      }
+      .nav-inner { min-height: 54px; padding: 0 16px; }
+      .hero-inner { padding: 32px 16px 30px; }
+      main { padding: 28px 14px 50px; }
+      .project-grid { grid-template-columns: 1fr; }
+      .project-card, .project-card.featured { grid-column: auto; min-height: 0; }
+      .project-card.featured h3 { font-size: 1.35rem; }
+      .footer-inner { padding: 26px 16px 32px; }
     }
-
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .project-card { transition: none; }
@@ -425,7 +231,6 @@
   </style>
 </head>
 <body>
-  <div class="top-rule" aria-hidden="true"></div>
   <nav class="site-nav" aria-label="Hovednavigation">
     <div class="nav-inner">
       <a class="brand" href="https://ai-michelklos.github.io/arbejdsmarked/" aria-current="page">Arbejdsmarkedet i tal</a>
@@ -456,10 +261,7 @@
   </header>
 
   <main id="overblik">
-    <div class="section-heading">
-      <h2>Vælg et overblik</h2>
-    </div>
-
+    <div class="section-heading"><h2>Vælg et overblik</h2></div>
     <section class="project-grid" aria-label="Dashboards og analyser">
       <article class="project-card featured">
         <div class="card-topline"><span class="project-type">Samlet overblik</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
@@ -468,23 +270,20 @@
         <ul class="topics" aria-label="Emner"><li>Ledighed</li><li>Beskæftigelse</li><li>Økonomi</li><li>Internationalt</li></ul>
         <a class="project-link" href="https://ai-michelklos.github.io/Dashboard/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
-
-      <article class="project-card purple">
+      <article class="project-card">
         <div class="card-topline"><span class="project-type">A-kasser</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>A-kasseindsigt</h3>
         <p>Vælg en a-kasse og undersøg dens medlemsgrundlag, profil og centrale arbejdsmarkedsdata i en samlet visning.</p>
         <ul class="topics" aria-label="Emner"><li>Medlemmer</li><li>Profiler</li><li>A-kasser</li></ul>
         <a class="project-link" href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
-
-      <article class="project-card blue">
+      <article class="project-card">
         <div class="card-topline"><span class="project-type">Kommuner</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>Kommuneindsigt</h3>
         <p>Vælg en kommune, følg ledighed og langtidsledighed, og sammenlign udviklingen med hele landet eller et andet område.</p>
         <ul class="topics" aria-label="Emner"><li>Kommuner</li><li>Ledighed</li><li>Sammenligning</li></ul>
         <a class="project-link" href="https://ai-michelklos.github.io/kommunal-beskaeftigelsesindsats/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
-
       <article class="project-card">
         <div class="card-topline"><span class="project-type">Arbejdskraft</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>Udenlandske lønmodtagere i Danmark</h3>
@@ -492,8 +291,7 @@
         <ul class="topics" aria-label="Emner"><li>Statsborgerskab</li><li>Brancher</li><li>Beskæftigelse</li></ul>
         <a class="project-link" href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
       </article>
-
-      <article class="project-card orange">
+      <article class="project-card">
         <div class="card-topline"><span class="project-type">Virksomheder</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
         <h3>Ansatte i Danmarks største virksomheder</h3>
         <p>Følg den månedlige beskæftigelse i Danmarks 1.000 største virksomheder, sammenlign virksomheder og undersøg hele brancher.</p>
@@ -503,10 +301,7 @@
     </section>
   </main>
 
-  <footer>
-    <div class="footer-inner"><strong>Udarbejdet af Michel Klos</strong></div>
-  </footer>
-
+  <footer><div class="footer-inner"><strong>Udarbejdet af Michel Klos</strong></div></footer>
   <script data-goatcounter="https://hovedsidearbejdsmarked.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
