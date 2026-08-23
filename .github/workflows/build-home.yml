@@ -1,0 +1,51 @@
+name: Byg samlet arbejdsmarkedsforside
+run-name: "Arbejdsmarked forside - ${{ github.event_name }}"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "control-tower.css"
+      - "control-tower.js"
+      - "jobs.html"
+      - "jobs.css"
+      - "jobs.js"
+      - "scripts/inject_home.py"
+      - ".github/workflows/build-home.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-arbejdsmarked-home
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Byg og kontroller forside
+        run: |
+          python -m py_compile scripts/inject_home.py
+          python scripts/inject_home.py
+          test -s index.html
+          test -s jobs.html
+          test -s control-tower.js
+          grep -q 'id="control-tower"' index.html
+          grep -q 'Arbejdsstyrken i Danmark' index.html
+          grep -q 'Hvor er jobbene?' index.html
+          grep -q 'michel@klos.dk' jobs.html
+      - name: Gem genereret forside
+        run: |
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "Dashboard automation"
+          git config user.email "dashboard-automation@users.noreply.github.com"
+          git commit -m "Opdater samlet arbejdsmarkedsforside"
+          git push
