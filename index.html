@@ -233,6 +233,7 @@
 .hero{background-color:#244D4B!important;background-image:linear-gradient(135deg,rgba(36,77,75,.30),rgba(15,43,54,.50)),url("https://raw.githubusercontent.com/AI-MichelKlos/A-kasseindsigt-dashboard/main/assets/arbejdsmarkedets-puls.webp")!important;background-position:center 46%,center!important;background-size:cover,cover!important;background-repeat:no-repeat,no-repeat!important}
 @media(max-width:720px){.hero{background-position:58% center,center!important}}
 </style><!-- /dak-header-theme -->
+  <link rel="stylesheet" href="control-tower.css">
 </head>
 <body>
   <nav class="site-nav" aria-label="Hovednavigation">
@@ -244,6 +245,7 @@
         <li><a href="https://ai-michelklos.github.io/kommunal-beskaeftigelsesindsats/">Kommuner</a></li>
         <li><a href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/">Udenlandske lønmodtagere</a></li>
         <li><a href="https://ai-michelklos.github.io/ansatteidanskevirksomheder/">Virksomheder</a></li>
+        <li><a href="https://ai-michelklos.github.io/arbejdsstyrke/">Arbejdsstyrke</a></li>
       </ul>
       <a class="mobile-overview-link" href="#overblik">Vælg overblik</a>
     </div>
@@ -257,12 +259,17 @@
         <div class="byline">Udarbejdet af Michel Klos</div>
         <p class="hero-copy">En samlet indgang til interaktive overblik om beskæftigelse, ledighed, a-kasser, virksomheder og arbejdsmarkedets udvikling.</p>
       </div>
-      <div class="hero-stat" aria-label="Fem interaktive løsninger">
-        <strong>5</strong>
+      <div class="hero-stat" aria-label="Syv interaktive løsninger">
+        <strong>7</strong>
         <span>interaktive dashboards og analyser</span>
       </div>
     </div>
   </header>
+
+  <section id="control-tower" aria-label="Arbejdsmarkedet lige nu">
+    <div class="ct-head"><div><h2>Arbejdsmarkedet lige nu</h2></div><p>Seneste tilgængelige tal på tværs af dashboards</p></div>
+    <div id="ctGrid" class="ct-grid"><div class="ct-loading">Henter de nyeste nøgletal...</div></div>
+  </section>
 
   <main id="overblik">
     <div class="section-heading"><h2>Vælg et overblik</h2></div>
@@ -302,10 +309,26 @@
         <ul class="topics" aria-label="Emner"><li>Ansatte</li><li>CVR</li><li>Brancher</li></ul>
         <a class="project-link" href="https://ai-michelklos.github.io/ansatteidanskevirksomheder/" target="_blank" rel="noopener"><span>Åbn visualisering</span><span aria-hidden="true">→</span></a>
       </article>
+    
+      <article class="project-card">
+        <div class="card-topline"><span class="project-type">Arbejdsudbud</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>Arbejdsstyrken i Danmark</h3>
+        <p>Følg arbejdsstyrkens størrelse, beskæftigelsesfrekvens, alder, den skjulte arbejdskraftreserve og det demografiske arbejdsudbudspotentiale.</p>
+        <ul class="topics" aria-label="Emner"><li>Arbejdsstyrke</li><li>Alder</li><li>Reserve</li><li>Demografi</li></ul>
+        <a class="project-link" href="https://ai-michelklos.github.io/arbejdsstyrke/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
+      </article>
+      <article class="project-card">
+        <div class="card-topline"><span class="project-type">Efterspørgsel</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
+        <h3>Hvor er jobbene?</h3>
+        <p>Se udviklingen i jobopslag, virksomhedernes forgæves rekrutteringer og de stillinger, hvor efterspørgslen er sværest at imødekomme.</p>
+        <ul class="topics" aria-label="Emner"><li>Jobopslag</li><li>Rekruttering</li><li>Stillinger</li><li>Efterspørgsel</li></ul>
+        <a class="project-link" href="jobs.html" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
+      </article>
     </section>
   </main>
 
   <footer><div class="footer-inner"><strong>Udarbejdet af Michel Klos</strong></div></footer>
   <script data-goatcounter="https://hovedsidearbejdsmarked.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <script src="control-tower.js"></script>
 </body>
 </html>
