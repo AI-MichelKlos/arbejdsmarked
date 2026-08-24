@@ -87,11 +87,13 @@
     }
 
     .hero {
-      background-color: var(--navy);
+      background-color: #244D4B;
       background-image:
-        radial-gradient(circle at 76% 32%, rgba(107,158,120,.22), transparent 31%),
-        radial-gradient(circle at 20% 100%, rgba(74,144,196,.12), transparent 33%),
-        linear-gradient(135deg, #0F2B36, #244D4B);
+        linear-gradient(135deg,rgba(36,77,75,.12),rgba(15,43,54,.26)),
+        url("https://raw.githubusercontent.com/AI-MichelKlos/A-kasseindsigt-dashboard/main/assets/arbejdsmarkedets-puls.webp");
+      background-position: center 46%, center;
+      background-size: cover, cover;
+      background-repeat: no-repeat, no-repeat;
       color: #fff;
     }
     .hero-inner {
@@ -110,6 +112,7 @@
       font-weight: 700;
       letter-spacing: .12em;
       text-transform: uppercase;
+      text-shadow: 0 1px 4px rgba(15,43,54,.32);
     }
     .hero h1 {
       max-width: 900px;
@@ -118,9 +121,10 @@
       font-size: clamp(2.1rem,4vw,3.4rem);
       font-weight: 700;
       line-height: 1.08;
+      text-shadow: 0 1px 4px rgba(15,43,54,.32);
     }
-    .byline { margin-top: 5px; color: #C9D8D5; font-size: .78rem; font-weight: 600; }
-    .hero-copy { max-width: 900px; margin: 10px 0 0; color: #E7EEEE; font-size: 1rem; line-height: 1.5; }
+    .byline { margin-top: 5px; color: #C9D8D5; font-size: .78rem; font-weight: 600; text-shadow: 0 1px 4px rgba(15,43,54,.32); }
+    .hero-copy { max-width: 900px; margin: 10px 0 0; color: #E7EEEE; font-size: 1rem; line-height: 1.5; text-shadow: 0 1px 4px rgba(15,43,54,.32); }
 
     main { max-width: 1280px; margin: 0 auto; padding: 34px 20px 64px; }
     .section-heading { margin: 0 0 20px; }
@@ -204,6 +208,9 @@
       .nav-links { display: none; }
       .mobile-overview-link { display: inline-flex; }
     }
+    @media (max-width: 720px) {
+      .hero { background-position: 58% center, center; }
+    }
     @media (max-width: 620px) {
       .nav-inner { min-height: 54px; padding: 0 16px; }
       .hero-inner { padding: 32px 16px 30px; }
@@ -218,11 +225,6 @@
       .project-card { transition: none; }
     }
   </style>
-<style id="dak-header-theme">
-.hero{background-color:#244D4B!important;background-image:linear-gradient(135deg,rgba(36,77,75,.30),rgba(15,43,54,.50)),url("https://raw.githubusercontent.com/AI-MichelKlos/A-kasseindsigt-dashboard/main/assets/arbejdsmarkedets-puls.webp")!important;background-position:center 46%,center!important;background-size:cover,cover!important;background-repeat:no-repeat,no-repeat!important}
-@media(max-width:720px){.hero{background-position:58% center,center!important}}
-</style><!-- /dak-header-theme -->
-  <link rel="stylesheet" href="control-tower.css">
 </head>
 <body>
   <nav class="site-nav" aria-label="Hovednavigation">
@@ -250,11 +252,6 @@
       </div>
     </div>
   </header>
-
-  <section id="control-tower" aria-label="Arbejdsmarkedet lige nu">
-    <div class="ct-head"><div><h2>Arbejdsmarkedet lige nu</h2></div><p>Seneste tilgængelige tal på tværs af dashboards</p></div>
-    <div id="ctGrid" class="ct-grid"><div class="ct-loading">Henter de nyeste nøgletal...</div></div>
-  </section>
 
   <main id="overblik">
     <div class="section-heading"><h2>Vælg et overblik</h2></div>
@@ -313,6 +310,5 @@
 
   <footer><div class="footer-inner"><strong>Udarbejdet af Michel Klos</strong></div></footer>
   <script data-goatcounter="https://hovedsidearbejdsmarked.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-  <script src="control-tower.js"></script>
 </body>
 </html>
