@@ -96,8 +96,8 @@
     }
     .hero-inner {
       display: grid;
-      grid-template-columns: minmax(0,1fr) auto;
-      gap: 42px;
+      grid-template-columns: 1fr;
+      gap: 0;
       align-items: end;
       max-width: 1280px;
       margin: 0 auto;
@@ -121,16 +121,6 @@
     }
     .byline { margin-top: 5px; color: #C9D8D5; font-size: .78rem; font-weight: 600; }
     .hero-copy { max-width: 900px; margin: 10px 0 0; color: #E7EEEE; font-size: 1rem; line-height: 1.5; }
-    .hero-stat {
-      min-width: 195px;
-      padding: 18px;
-      border: 1px solid rgba(255,255,255,.22);
-      border-radius: 12px;
-      background: rgba(255,255,255,.08);
-      box-shadow: 0 6px 20px rgba(0,0,0,.12);
-    }
-    .hero-stat strong { display: block; color: #fff; font-size: 2.5rem; font-weight: 800; line-height: 1; }
-    .hero-stat span { display: block; margin-top: 8px; color: #DDE9E6; font-size: .8rem; line-height: 1.4; }
 
     main { max-width: 1280px; margin: 0 auto; padding: 34px 20px 64px; }
     .section-heading { margin: 0 0 20px; }
@@ -207,7 +197,6 @@
 
     @media (max-width: 940px) {
       .hero-inner { grid-template-columns: 1fr; gap: 22px; }
-      .hero-stat { width: fit-content; min-width: 210px; }
       .project-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .project-card.featured { grid-column: span 2; }
     }
@@ -258,10 +247,6 @@
         <h1>Arbejdsmarkedet i tal</h1>
         <div class="byline">Udarbejdet af Michel Klos</div>
         <p class="hero-copy">En samlet indgang til interaktive overblik om beskæftigelse, ledighed, a-kasser, virksomheder og arbejdsmarkedets udvikling.</p>
-      </div>
-      <div class="hero-stat" aria-label="Syv interaktive løsninger">
-        <strong>7</strong>
-        <span>interaktive dashboards og analyser</span>
       </div>
     </div>
   </header>
