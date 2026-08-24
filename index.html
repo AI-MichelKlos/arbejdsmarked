@@ -152,7 +152,21 @@
       transition: transform .16s ease, box-shadow .16s ease;
     }
     .project-card:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(15,43,54,.11); }
-    .project-card.featured { grid-column: span 2; }
+    .project-card.featured {
+      grid-column: auto;
+      border-top-color: var(--blue);
+      background: #F7FAFD;
+    }
+    .project-card.featured .project-type {
+      border-color: #BDD5E7;
+      color: #2F6E9B;
+      background: #EEF5FA;
+    }
+    .project-card.featured .live-dot { background: var(--blue); }
+    .project-card.featured .project-link {
+      color: #2F6E9B;
+      text-decoration-color: var(--blue);
+    }
     .card-topline { display: flex; gap: 9px; align-items: center; margin-bottom: 18px; }
     .project-type {
       padding: 5px 8px;
@@ -168,7 +182,6 @@
     .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
     .live-label { color: var(--muted); font-size: .72rem; font-weight: 700; }
     .project-card h3 { margin: 0; color: var(--navy); font-size: 1.35rem; font-weight: 700; line-height: 1.22; }
-    .project-card.featured h3 { font-size: 1.55rem; }
     .project-card p { margin: 12px 0 18px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
     .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 20px; padding: 0; list-style: none; }
     .topics li {
@@ -202,7 +215,6 @@
     @media (max-width: 940px) {
       .hero-inner { grid-template-columns: 1fr; gap: 22px; }
       .project-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-      .project-card.featured { grid-column: span 2; }
     }
     @media (max-width: 800px) {
       .nav-links { display: none; }
@@ -217,7 +229,6 @@
       main { padding: 28px 14px 50px; }
       .project-grid { grid-template-columns: 1fr; }
       .project-card, .project-card.featured { grid-column: auto; min-height: 0; }
-      .project-card.featured h3 { font-size: 1.35rem; }
       .footer-inner { padding: 26px 16px 32px; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -258,7 +269,7 @@
     <section class="project-grid" aria-label="Dashboards og analyser">
       <article class="project-card featured">
         <div class="card-topline"><span class="project-type">Samlet overblik</span><span class="live-dot" aria-hidden="true"></span><span class="live-label">Interaktiv</span></div>
-        <h3>Analytisk overblik: Arbejdsmarkedet</h3>
+        <h3>Arbejdsmarkedet i overblik</h3>
         <p>Følg de centrale nøgletal for ledighed, beskæftigelse, samfundsøkonomi og den internationale udvikling i ét samlet dashboard.</p>
         <ul class="topics" aria-label="Emner"><li>Ledighed</li><li>Beskæftigelse</li><li>Økonomi</li><li>Internationalt</li></ul>
         <a class="project-link" href="https://ai-michelklos.github.io/Dashboard/" target="_blank" rel="noopener"><span>Åbn dashboard</span><span aria-hidden="true">→</span></a>
