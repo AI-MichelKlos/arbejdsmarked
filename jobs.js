@@ -141,51 +141,6 @@
     });
   }
 
-  function privateVacancyTrend(id, data) {
-    const options = baseOpts(true);
-    options.scales.y.ticks = { callback: value => nf0.format(value) };
-    options.scales.y1 = {
-      beginAtZero: true,
-      position: 'right',
-      grid: { drawOnChartArea: false },
-      ticks: { callback: value => nf1.format(value) + ' %' }
-    };
-    options.plugins.tooltip.callbacks = {
-      title: items => items.length ? qp(items[0].label) : '',
-      label: ctx => ctx.dataset.label + ': ' + (ctx.dataset.yAxisID === 'y1'
-        ? nf1.format(ctx.parsed.y) + ' %'
-        : nf0.format(ctx.parsed.y))
-    };
-
-    new Chart(document.getElementById(id), {
-      type: 'line',
-      data: {
-        labels: data.labels || [],
-        datasets: [
-          {
-            label: 'Ledige stillinger (antal)',
-            data: data.count || [],
-            borderColor: C.blue,
-            backgroundColor: C.blue,
-            pointRadius: 0,
-            borderWidth: 2.4,
-            yAxisID: 'y'
-          },
-          {
-            label: 'Andel ledige stillinger',
-            data: data.rate || [],
-            borderColor: C.orange,
-            backgroundColor: C.orange,
-            pointRadius: 0,
-            borderWidth: 2.4,
-            yAxisID: 'y1'
-          }
-        ]
-      },
-      options
-    });
-  }
-
   function wrapLabel(text, maxChars = 27) {
     const words = String(text || '').split(/\s+/);
     const lines = [];
@@ -399,9 +354,7 @@
 
       if (statbank) {
         sectorVacancies('allVacancies', allVacancies);
-        privateVacancyTrend('privateVacancies', privateVacancies);
         vacancyBranchBars('vacancyBranches', privateVacancies.branches || []);
-        document.getElementById('privatePeriod').textContent = qp(privateVacancies.latestPeriod);
         document.getElementById('branchPeriod').textContent = qp(privateVacancies.latestPeriod);
       } else {
         const el = document.getElementById('status');
