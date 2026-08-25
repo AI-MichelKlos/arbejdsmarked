@@ -24,6 +24,11 @@
     return m ? m[2] + '/' + m[1].slice(2) : v;
   }
 
+  function qp(v) {
+    const m = String(v || '').match(/^(\d{4})K([1-4])$/);
+    return m ? m[2] + '. kvt. ' + m[1] : String(v || '');
+  }
+
   function kpi(label, value, detail) {
     return `<div class="kpi"><small>${label}</small><strong>${value}</strong><span>${detail || ''}</span></div>`;
   }
@@ -94,6 +99,81 @@
             type: 'line',
             label: 'Forgæves rekrutteringsrate',
             data: rate,
+            borderColor: C.orange,
+            backgroundColor: C.orange,
+            pointRadius: 0,
+            borderWidth: 2.4,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options
+    });
+  }
+
+  function sectorVacancies(id, data) {
+    const options = baseOpts(true);
+    options.plugins.tooltip.callbacks = {
+      title: items => items.length ? qp(items[0].label) : '',
+      label: ctx => ctx.dataset.label + ': ' + nf0.format(ctx.parsed.y)
+    };
+
+    new Chart(document.getElementById(id), {
+      type: 'bar',
+      data: {
+        labels: data.labels || [],
+        datasets: [
+          {
+            label: 'Alle sektorer',
+            data: data.count || [],
+            backgroundColor: C.green,
+            borderRadius: 3
+          },
+          {
+            label: 'Private virksomheder',
+            data: data.privateCount || [],
+            backgroundColor: C.blue,
+            borderRadius: 3
+          }
+        ]
+      },
+      options
+    });
+  }
+
+  function privateVacancyTrend(id, data) {
+    const options = baseOpts(true);
+    options.scales.y.ticks = { callback: value => nf0.format(value) };
+    options.scales.y1 = {
+      beginAtZero: true,
+      position: 'right',
+      grid: { drawOnChartArea: false },
+      ticks: { callback: value => nf1.format(value) + ' %' }
+    };
+    options.plugins.tooltip.callbacks = {
+      title: items => items.length ? qp(items[0].label) : '',
+      label: ctx => ctx.dataset.label + ': ' + (ctx.dataset.yAxisID === 'y1'
+        ? nf1.format(ctx.parsed.y) + ' %'
+        : nf0.format(ctx.parsed.y))
+    };
+
+    new Chart(document.getElementById(id), {
+      type: 'line',
+      data: {
+        labels: data.labels || [],
+        datasets: [
+          {
+            label: 'Ledige stillinger (antal)',
+            data: data.count || [],
+            borderColor: C.blue,
+            backgroundColor: C.blue,
+            pointRadius: 0,
+            borderWidth: 2.4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Andel ledige stillinger',
+            data: data.rate || [],
             borderColor: C.orange,
             backgroundColor: C.orange,
             pointRadius: 0,
@@ -206,18 +286,83 @@
     });
   }
 
+  function vacancyBranchBars(id, items) {
+    const values = items.map(item => Number(item.count) || 0);
+    const maxValue = Math.max(0, ...values);
+    const step = niceStep(maxValue);
+    const axisMax = Math.max(step, Math.ceil(maxValue / step) * step);
+
+    new Chart(document.getElementById(id), {
+      type: 'bar',
+      data: {
+        labels: items.map(item => item.name),
+        datasets: [{
+          label: 'Ledige stillinger',
+          data: values,
+          backgroundColor: C.purple,
+          borderRadius: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        interaction: { mode: 'nearest', axis: 'y', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0F2B36',
+            padding: 11,
+            callbacks: {
+              title: ctx => ctx.length ? items[ctx[0].dataIndex]?.name || '' : '',
+              label: ctx => {
+                const item = items[ctx.dataIndex] || {};
+                const rate = item.rate == null ? '' : ' · ' + nf1.format(item.rate) + ' % af stillingerne';
+                return nf0.format(ctx.raw) + ' ledige stillinger' + rate;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: axisMax,
+            grid: { color: C.grid },
+            ticks: { stepSize: step, precision: 0, callback: value => nf0.format(value) }
+          },
+          y: {
+            grid: { display: false },
+            ticks: {
+              autoSkip: false,
+              padding: 8,
+              callback: function (value) {
+                return wrapLabel(this.getLabelForValue(value));
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
   (async function () {
     try {
-      const response = await fetch(
-        'https://ai-michelklos.github.io/Dashboard/data/dashboard-data.json?v=' + Date.now(),
-        { cache: 'no-store' }
-      );
+      const [response, statbankResponse] = await Promise.all([
+        fetch(
+          'https://ai-michelklos.github.io/Dashboard/data/dashboard-data.json?v=' + Date.now(),
+          { cache: 'no-store' }
+        ),
+        fetch('data/jobs-statbank.json?v=' + Date.now(), { cache: 'no-store' }).catch(() => null)
+      ]);
       if (!response.ok) throw new Error(response.status);
 
       const data = await response.json();
+      const statbank = statbankResponse?.ok ? await statbankResponse.json() : null;
       const vacanciesData = data.vacancies || {};
       const failed = data.failedRecruitment || {};
       const unemployment = data.unemployment || {};
+      const allVacancies = statbank?.allVacancies || {};
+      const privateVacancies = statbank?.privateVacancies || {};
 
       document.getElementById('updated').textContent = data.meta?.updateStatus?.checkedAt
         ? 'Data kontrolleret ' + new Date(data.meta.updateStatus.checkedAt).toLocaleDateString('da-DK', { dateStyle: 'long' })
@@ -230,9 +375,16 @@
       const attempts = fi >= 0 ? failed.attempts?.[fi] : null;
       const rate = fi >= 0 ? failed.rate?.[fi] : null;
       const unemp = ui >= 0 ? unemployment.total?.[ui] : null;
+      const li = (allVacancies.labels || []).length - 1;
+      const totalVacancies = li >= 0 ? allVacancies.count?.[li] : null;
+      const privateVacancyCount = li >= 0 ? allVacancies.privateCount?.[li] : null;
+      const privateVacancyRate = li >= 0 ? allVacancies.privateRate?.[li] : null;
+      const vacancyPeriod = li >= 0 ? qp(allVacancies.labels[li]) : '';
 
       document.getElementById('kpis').innerHTML =
         kpi('Nyopslåede stillinger', vacancies == null ? 'Ikke tilgængelig' : nf0.format(vacancies), vi >= 0 ? mp(vacanciesData.labels[vi]) : '') +
+        kpi('Ledige stillinger i alt', totalVacancies == null ? 'Ikke tilgængelig' : nf0.format(totalVacancies), vacancyPeriod + (vacancyPeriod ? ' · alle sektorer' : '')) +
+        kpi('Heraf i private virksomheder', privateVacancyCount == null ? 'Ikke tilgængelig' : nf0.format(privateVacancyCount), vacancyPeriod + (privateVacancyRate == null ? '' : ' · ' + nf1.format(privateVacancyRate) + ' %')) +
         kpi('Forgæves rekrutteringsforsøg', attempts == null ? 'Ikke tilgængelig' : nf0.format(attempts), fi >= 0 ? mp(failed.labels[fi]) : '') +
         kpi('Forgæves rekrutteringsrate', rate == null ? 'Ikke tilgængelig' : nf1.format(rate) + ' %', fi >= 0 ? mp(failed.labels[fi]) : '') +
         kpi('Bruttoledige', unemp == null ? 'Ikke tilgængelig' : nf0.format(unemp), ui >= 0 ? mp(unemployment.labels[ui]) : '');
@@ -244,6 +396,18 @@
         backgroundColor: C.blue,
         pointRadius: 0
       }], true);
+
+      if (statbank) {
+        sectorVacancies('allVacancies', allVacancies);
+        privateVacancyTrend('privateVacancies', privateVacancies);
+        vacancyBranchBars('vacancyBranches', privateVacancies.branches || []);
+        document.getElementById('privatePeriod').textContent = qp(privateVacancies.latestPeriod);
+        document.getElementById('branchPeriod').textContent = qp(privateVacancies.latestPeriod);
+      } else {
+        const el = document.getElementById('status');
+        el.style.display = 'block';
+        el.textContent = 'Tallene for ledige stillinger fra Statistikbanken kunne ikke indlæses.';
+      }
 
       recruitment('recruitment', failed.labels || [], failed.attempts || [], failed.rate || []);
       hbar('occupations', failed.topOccupations || []);
