@@ -98,11 +98,6 @@ def build_payload(branch_dataset, sector_dataset):
     new_private_counts = [sector_value("1040", "LS", period) for period in sector_times]
     new_private_rates = [sector_value("1040", "ALS", period) for period in sector_times]
 
-    historic_times = [period for period in times if period < sector_times[0]]
-    private_times = historic_times + sector_times
-    private_counts = [value("A-V", "LS", period) for period in historic_times] + new_private_counts
-    private_rates = [value("A-V", "ALS", period) for period in historic_times] + new_private_rates
-
     return {
         "meta": {
             "source": "Danmarks Statistik",
@@ -115,7 +110,7 @@ def build_payload(branch_dataset, sector_dataset):
                 value for value in (branch_dataset.get("updated"), sector_dataset.get("updated")) if value
             ),
             "fetchedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "note": "LSK11 og LSK12 viderefører den afsluttede LSK01-tabel. Den private tidsserie bruger LSK11 til og med 2025 og LSK12 fra 2026.",
+            "note": "Dashboardet bruger kun de aktive tabeller LSK11 og LSK12 fra den aktuelle opgørelse.",
         },
         "allVacancies": {
             "labels": sector_times,
@@ -126,10 +121,10 @@ def build_payload(branch_dataset, sector_dataset):
             "latestPeriod": sector_times[-1],
         },
         "privateVacancies": {
-            "labels": private_times,
-            "count": private_counts,
-            "rate": private_rates,
-            "latestPeriod": private_times[-1],
+            "labels": sector_times,
+            "count": new_private_counts,
+            "rate": new_private_rates,
+            "latestPeriod": sector_times[-1],
             "branches": branch_rows,
         },
     }
