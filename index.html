@@ -236,6 +236,7 @@
       .project-card { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="control-tower.css">
 </head>
 <body>
   <nav class="site-nav" aria-label="Hovednavigation">
@@ -263,6 +264,11 @@
       </div>
     </div>
   </header>
+
+  <section id="control-tower" aria-label="Arbejdsmarkedet lige nu">
+    <div class="ct-head"><div><h2>Arbejdsmarkedet lige nu</h2></div><p>Seneste tilgængelige tal på tværs af dashboards</p></div>
+    <div id="ctGrid" class="ct-grid"><div class="ct-loading">Henter de nyeste nøgletal...</div></div>
+  </section>
 
   <main id="overblik">
     <div class="section-heading"><h2>Vælg et overblik</h2></div>
@@ -321,5 +327,6 @@
 
   <footer><div class="footer-inner"><strong>Udarbejdet af Michel Klos</strong></div></footer>
   <script data-goatcounter="https://hovedsidearbejdsmarked.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <script src="control-tower.js"></script>
 </body>
 </html>
