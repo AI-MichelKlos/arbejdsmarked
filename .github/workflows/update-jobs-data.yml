@@ -1,0 +1,43 @@
+name: Opdater ledige stillinger
+run-name: "Ledige stillinger - ${{ github.event_name }}"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 7 * * 1-5"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/update_jobs_data.py"
+      - ".github/workflows/update-jobs-data.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-jobs-statbank-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Hent og kontroller LSK11 og LSK12
+        run: |
+          python -m py_compile scripts/update_jobs_data.py
+          python scripts/update_jobs_data.py
+          python -m json.tool data/jobs-statbank.json > /dev/null
+      - name: Gem nye tal
+        run: |
+          git add data/jobs-statbank.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "Dashboard automation"
+          git config user.email "dashboard-automation@users.noreply.github.com"
+          git commit -m "Opdater ledige stillinger fra Statistikbanken"
+          git push
+
