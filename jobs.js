@@ -1,12 +1,24 @@
 (function () {
+  // Michels efterårsstil: faste diagramfarver i fast rækkefølge
   const C = {
-    green: '#6B9E78',
-    gd: '#3d6b47',
-    blue: '#4A90C4',
-    orange: '#E07A40',
-    purple: '#9B59B6',
-    grid: '#E8EBE8'
+    s1: '#9A5B34', // cognac
+    s2: '#146298', // blå
+    s3: '#8C9C41', // oliven
+    s4: '#8C7FCF', // lyng
+    s5: '#7D3659', // blomme
+    s6: '#1D9999', // petrol
+    total: '#4A3428', // brun, til "I alt"
+    neutral: '#C9BCAE', // gråbrun, til "Andre"
+    grid: '#E6DDD2',
+    tick: '#6F6258',
+    tooltip: '#4A3428'
   };
+  if (window.Chart) {
+    Chart.defaults.font.family = 'Arial, "Helvetica Neue", Helvetica, sans-serif';
+    Chart.defaults.color = C.tick;
+    Chart.defaults.borderColor = C.grid;
+    Chart.defaults.locale = 'da-DK';
+  }
 
   const nf0 = new Intl.NumberFormat('da-DK', { maximumFractionDigits: 0 });
   const nf1 = new Intl.NumberFormat('da-DK', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -44,7 +56,7 @@
           align: 'start',
           labels: { usePointStyle: true, padding: 18 }
         },
-        tooltip: { backgroundColor: '#0F2B36', padding: 11 }
+        tooltip: { backgroundColor: C.tooltip, padding: 11 }
       },
       scales: {
         x: {
@@ -92,15 +104,15 @@
           {
             label: 'Forgæves rekrutteringsforsøg',
             data: attempts,
-            backgroundColor: C.green,
+            backgroundColor: C.s1,
             yAxisID: 'y'
           },
           {
             type: 'line',
             label: 'Forgæves rekrutteringsrate',
             data: rate,
-            borderColor: C.orange,
-            backgroundColor: C.orange,
+            borderColor: C.s2,
+            backgroundColor: C.s2,
             pointRadius: 0,
             borderWidth: 2.4,
             yAxisID: 'y1'
@@ -126,13 +138,13 @@
           {
             label: 'Alle sektorer',
             data: data.count || [],
-            backgroundColor: C.green,
+            backgroundColor: C.s1,
             borderRadius: 3
           },
           {
             label: 'Private virksomheder',
             data: data.privateCount || [],
-            backgroundColor: C.blue,
+            backgroundColor: C.s2,
             borderRadius: 3
           }
         ]
@@ -180,7 +192,7 @@
         datasets: [{
           label: 'Forgæves rekrutteringsforsøg',
           data: values,
-          backgroundColor: C.blue,
+          backgroundColor: C.s1,
           borderWidth: 0,
           borderRadius: 3
         }]
@@ -194,7 +206,7 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#0F2B36',
+            backgroundColor: C.tooltip,
             padding: 11,
             callbacks: {
               title: ctx => ctx.length ? items[ctx[0].dataIndex]?.name || '' : '',
@@ -212,13 +224,13 @@
             title: {
               display: true,
               text: 'Antal forgæves rekrutteringsforsøg',
-              color: '#4A5A5F',
+              color: C.tick,
               font: { size: 12, weight: '600' }
             },
             ticks: {
               stepSize: step,
               precision: 0,
-              color: '#4A5A5F',
+              color: C.tick,
               callback: value => nf0.format(value)
             }
           },
@@ -228,7 +240,7 @@
             border: { display: false },
             ticks: {
               autoSkip: false,
-              color: '#4A5A5F',
+              color: C.tick,
               padding: 8,
               font: { size: 12 },
               callback: function (value) {
@@ -254,7 +266,7 @@
         datasets: [{
           label: 'Ledige stillinger',
           data: values,
-          backgroundColor: C.purple,
+          backgroundColor: C.s1,
           borderRadius: 3
         }]
       },
@@ -266,7 +278,7 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#0F2B36',
+            backgroundColor: C.tooltip,
             padding: 11,
             callbacks: {
               title: ctx => ctx.length ? items[ctx[0].dataIndex]?.name || '' : '',
@@ -347,8 +359,8 @@
       line('vacancies', vacanciesData.labels || [], [{
         label: 'Nyopslåede stillinger',
         data: vacanciesData.values || [],
-        borderColor: C.blue,
-        backgroundColor: C.blue,
+        borderColor: C.s1,
+        backgroundColor: C.s1,
         pointRadius: 0
       }], true);
 
