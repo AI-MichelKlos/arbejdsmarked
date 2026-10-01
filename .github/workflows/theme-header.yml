@@ -25,7 +25,7 @@ jobs:
           start = '<style id="dak-header-theme">'
           end = '</style><!-- /dak-header-theme -->'
           css = '''<style id="dak-header-theme">
-          .hero{background-color:#244D4B!important;background-image:linear-gradient(135deg,rgba(36,77,75,.30),rgba(15,43,54,.50)),url("https://raw.githubusercontent.com/AI-MichelKlos/A-kasseindsigt-dashboard/main/assets/arbejdsmarkedets-puls.webp")!important;background-position:center 46%,center!important;background-size:cover,cover!important;background-repeat:no-repeat,no-repeat!important}
+          .hero{background-color:#4A3428!important;background-image:linear-gradient(135deg,rgba(43,33,27,.18),rgba(43,33,27,.38)),url("https://raw.githubusercontent.com/AI-MichelKlos/arbejdsmarked/main/assets/arbejdsmarkedets-puls-brun.webp")!important;background-position:center 46%,center!important;background-size:cover,cover!important;background-repeat:no-repeat,no-repeat!important}
           @media(max-width:720px){.hero{background-position:58% center,center!important}}
           </style><!-- /dak-header-theme -->'''
           if start in text and end in text:
@@ -42,5 +42,5 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "Dashboard design"
           git config user.email "dashboard-design@users.noreply.github.com"
-          git commit -m "Giv Arbejdsmarked eget topdesign"
+          git commit -m "Giv Arbejdsmarked brunt topdesign (efterårsstil)"
           git push
