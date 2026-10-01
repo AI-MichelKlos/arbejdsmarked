@@ -1,0 +1,4 @@
+/* Michels efterårsstil - fælles overskriftsskrift for alle dashboards.
+   Cambria på Windows og Mac med Office, ellers Caladea (samme mål som Cambria). */
+@import url("https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&display=swap");
+h1, h2, h3 { font-family: Cambria, Caladea, Georgia, "Times New Roman", serif !important; }
