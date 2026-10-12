@@ -30,10 +30,13 @@ DASHBOARDS = [
     {"navn": "Kommunal beskæftigelsesindsats", "repo": "kommunal-beskaeftigelsesindsats",  "data": "data/dashboard-data.json", "min_bytes": 20000, "max_dage": 9},
     {"navn": "Udenlandske lønmodtagere",       "repo": "udenlandskeloenmodtagere",         "data": "data/dashboard-data.json", "min_bytes": 10000, "max_dage": 11},
     {"navn": "Arbejdsstyrke",                  "repo": "arbejdsstyrke",                    "data": "data/dashboard-data.json", "min_bytes": 3000,  "max_dage": 11},
-    # Arkiveret statisk side. Bevar linkkontrol, men kræv ikke canvas eller gammel sidestørrelse.\n    {"navn": "Ansatte i danske virksomheder",  "repo": "ansatteidanskevirksomheder",       "data": None,  "min_bytes": 800, "arkiveret": True},
+    # Arkiveret statisk side. Bevar linkkontrol, men kræv ikke canvas eller gammel sidestørrelse.
+    {"navn": "Ansatte i danske virksomheder",  "repo": "ansatteidanskevirksomheder",       "data": None,  "min_bytes": 800, "arkiveret": True},
 ]
 
-ARKIVEREDE = {d["navn"] for d in DASHBOARDS if d.get("arkiveret")}\n\n# Containere med opdelinger: spring over (kun totalen tjekkes)
+ARKIVEREDE = {d["navn"] for d in DASHBOARDS if d.get("arkiveret")}
+
+# Containere med opdelinger: spring over (kun totalen tjekkes)
 SPRING_OVER = {"byakasse", "bykommune", "funds", "municipalities", "kommuner",
                "sanctions", "types", "items", "ageitems", "nationalities",
                "fundnames", "methodnotes", "labels", "meta", "sourcestatus",
