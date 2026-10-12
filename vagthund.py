@@ -30,10 +30,10 @@ DASHBOARDS = [
     {"navn": "Kommunal beskæftigelsesindsats", "repo": "kommunal-beskaeftigelsesindsats",  "data": "data/dashboard-data.json", "min_bytes": 20000, "max_dage": 9},
     {"navn": "Udenlandske lønmodtagere",       "repo": "udenlandskeloenmodtagere",         "data": "data/dashboard-data.json", "min_bytes": 10000, "max_dage": 11},
     {"navn": "Arbejdsstyrke",                  "repo": "arbejdsstyrke",                    "data": "data/dashboard-data.json", "min_bytes": 3000,  "max_dage": 11},
-    {"navn": "Ansatte i danske virksomheder",  "repo": "ansatteidanskevirksomheder",       "data": None,  "min_bytes": 100000},
+    # Arkiveret statisk side. Bevar linkkontrol, men kræv ikke canvas eller gammel sidestørrelse.\n    {"navn": "Ansatte i danske virksomheder",  "repo": "ansatteidanskevirksomheder",       "data": None,  "min_bytes": 800, "arkiveret": True},
 ]
 
-# Containere med opdelinger: spring over (kun totalen tjekkes)
+ARKIVEREDE = {d["navn"] for d in DASHBOARDS if d.get("arkiveret")}\n\n# Containere med opdelinger: spring over (kun totalen tjekkes)
 SPRING_OVER = {"byakasse", "bykommune", "funds", "municipalities", "kommuner",
                "sanctions", "types", "items", "ageitems", "nationalities",
                "fundnames", "methodnotes", "labels", "meta", "sourcestatus",
@@ -152,7 +152,7 @@ for d in DASHBOARDS:
             synlig = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", html)
             if len(body) < d["min_bytes"]:
                 flag(1, dash, "side_tom", f"Siden er kun {len(body)} bytes (forventet mindst {d['min_bytes']})")
-            if d["repo"] != "arbejdsmarked" and "<canvas" not in html.lower():
+            if d["repo"] != "arbejdsmarked" and not d.get("arkiveret") and "<canvas" not in html.lower():
                 flag(1, dash, "canvas", "Ingen <canvas> på siden, graferne kan mangle")
             for m in ["Der opstod en fejl", "Fejl ved indlæsning", "Kunne ikke hente", "Data mangler"]:
                 if m.lower() in synlig.lower():
@@ -235,9 +235,6 @@ if a.forrige:
     except Exception as e:
         print(f"(kunne ikke læse forrige state: {e})", file=sys.stderr)
 
-for f in fund:
-    f["først_set"] = kendte.get(f["nøgle"], NOW.strftime("%Y-%m-%d"))
-    f["nyt"] = f["nøgle"] not in kendte
 løste = []
 if forrige:
     nu = {f["nøgle"] for f in fund}
@@ -248,8 +245,12 @@ if forrige:
         if gl.get("checkedAt") and ny.get("checkedAt") == gl.get("checkedAt") and (ny.get("alder_dage") or 0) > 8:
             pass  # dækkes allerede af stilstandstjekket
         gb, nb = gl.get("side_bytes"), ny.get("side_bytes")
-        if gb and nb and nb < gb * 0.7:
+        if gb and nb and dash not in ARKIVEREDE and nb < gb * 0.7:
             flag(1, dash, "krympet", f"Siden er krympet fra {gb} til {nb} bytes siden sidste kontrol")
+
+for f in fund:
+    f["først_set"] = kendte.get(f["nøgle"], NOW.strftime("%Y-%m-%d"))
+    f["nyt"] = f["nøgle"] not in kendte
 
 state["fund"] = fund
 
