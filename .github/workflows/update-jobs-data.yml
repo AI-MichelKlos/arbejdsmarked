@@ -39,5 +39,14 @@ jobs:
           git config user.name "Dashboard automation"
           git config user.email "dashboard-automation@users.noreply.github.com"
           git commit -m "Opdater ledige stillinger fra Statistikbanken"
-          git push
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep $((attempt * 10))
+            git pull --rebase origin main
+          done
 

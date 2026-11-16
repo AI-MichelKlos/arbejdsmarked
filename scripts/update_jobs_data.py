@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
+import http.client
 import json
 import math
 import re
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -32,12 +35,39 @@ def cube_value(dataset, coordinates):
 
 def fetch_dataset(table, selections):
     query = urllib.parse.urlencode(selections)
-    request = urllib.request.Request(
-        f"https://api.statbank.dk/v1/data/{table}/JSONSTAT?{query}",
-        headers={"User-Agent": "AI-MichelKlos/arbejdsmarked jobs dashboard"},
-    )
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return json.load(response)["dataset"]
+    url = f"https://api.statbank.dk/v1/data/{table}/JSONSTAT?{query}"
+    last_error = None
+    for attempt in range(1, 5):
+        request = urllib.request.Request(
+            url,
+            headers={"User-Agent": "AI-MichelKlos/arbejdsmarked jobs dashboard"},
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                return json.load(response)["dataset"]
+        except urllib.error.HTTPError as exc:
+            if exc.code != 429 and exc.code < 500:
+                raise
+            last_error = exc
+        except (
+            urllib.error.URLError,
+            http.client.RemoteDisconnected,
+            TimeoutError,
+            json.JSONDecodeError,
+        ) as exc:
+            last_error = exc
+
+        if attempt == 4:
+            break
+        delay = 2 ** (attempt - 1)
+        print(
+            f"{table}: midlertidig hentefejl ({last_error}); "
+            f"forsøger igen om {delay} sekunder",
+            flush=True,
+        )
+        time.sleep(delay)
+
+    raise RuntimeError(f"{table} kunne ikke hentes efter 4 forsøg") from last_error
 
 
 def build_payload(branch_dataset, sector_dataset):
